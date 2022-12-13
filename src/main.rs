@@ -1,5 +1,6 @@
-use std::time::Duration;
+use std::{time::Duration, sync::Arc};
 
+use dotenv::dotenv;
 use teloxide::{prelude::*, utils::command::BotCommands};
 
 use command::Command;
@@ -11,35 +12,42 @@ mod ad_protection;
 
 #[tokio::main]
 async fn main() {
+    dotenv().ok();
     pretty_env_logger::init();
     log::info!("Starting home bot...");
 
     let bot = Bot::from_env();
+
     let ad_protection = AdProtection::new(
         String::from("http://192.168.1.2"),
         String::from("abc123"),
     );
 
-    Command::repl(bot, |bot: Bot, msg: Message, cmd: Command| async move {
-        match cmd {
-            Command::IsTrackingServiceEnabled => {
-                log::info!("Checking if tracking service is enabled...");
+    let ad_protection = Arc::new(ad_protection);
 
-                let enabled = if ad_protection.is_enabled() { "enabled" } else { "disabled" };
+    Command::repl(bot, move |bot: Bot, msg: Message, cmd: Command| {
+        let adp = ad_protection.clone();
 
-                bot.send_message(msg.chat.id, enabled).await?
-            }
-            Command::DisableTrackingServices { duration } => {
-                log::info!("Received DisableAdBlock command with duration: {:?}", duration);
+        async move {
+            match cmd {
+                Command::IsTrackingServiceEnabled => {
+                    log::info!("Checking if tracking service is enabled...");
 
-                ad_protection.disable(Duration::from_secs(10));
+                    let enabled = if adp.is_enabled() { "enabled" } else { "disabled" };
 
-                bot.send_message(msg.chat.id, "ok").await?
-            }
-            _ => bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?
-        };
+                    bot.send_message(msg.chat.id, enabled).await?
+                }
+                Command::DisableTrackingServices { duration } => {
+                    log::info!("Received DisableAdBlock command with duration: {:?}", duration);
 
-        Ok(())
+                    adp.disable(Duration::from_secs(10));
+
+                    bot.send_message(msg.chat.id, "ok").await?
+                }
+                _ => bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?
+            };
+
+            Ok(())
+        }
     }).await;
 }
-
