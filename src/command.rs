@@ -27,8 +27,10 @@ pub enum Command {
     Start,
     #[command(rename_rule = "lowercase", description = "Display this text.")]
     Help,
-    #[command(description = "Checks whether the tracking service blocking is enabled or not.")]
+    #[command(rename_rule = "lowercase", description = "Ping & Pong")]
+    Ping,
+    #[command(rename_rule = "snake_case", description = "Checks whether the tracking service blocking is enabled or not.")]
     IsTrackingServiceEnabled,
-    #[command(description = "Disables tracking services for the given duration.")]
-    DisableTrackingServices { duration: Param },
+    #[command(rename_rule = "snake_case", description = "Disables tracking services for the given duration.")]
+    DisableTrackingService { duration: Param },
 }
