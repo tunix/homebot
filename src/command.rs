@@ -29,8 +29,8 @@ pub enum Command {
     Help,
     #[command(rename_rule = "lowercase", description = "Ping & Pong")]
     Ping,
-    #[command(rename_rule = "snake_case", description = "Checks whether the tracking service blocking is enabled or not.")]
-    IsTrackingServiceEnabled,
-    #[command(rename_rule = "snake_case", description = "Disables tracking services for the given duration.")]
-    DisableTrackingService { duration: Param },
+    #[command(rename_rule = "snake_case", description = "Checks whether the ad protection blocking is enabled or not.")]
+    IsAdProtectionEnabled,
+    #[command(rename_rule = "snake_case", description = "Disables ad protection for the given number of minutes.")]
+    DisableAdProtection { duration: Param },
 }

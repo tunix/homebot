@@ -396,6 +396,7 @@ dependencies = [
  "dotenv",
  "log",
  "pretty_env_logger",
+ "reqwest",
  "serde",
  "serde_yaml",
  "teloxide",
