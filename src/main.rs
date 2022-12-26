@@ -19,7 +19,7 @@ async fn main() {
     log::info!("Starting home bot...");
 
     let configuration = configuration::read_config();
-    let bot = Bot::from_env();
+    let bot = Bot::new(&configuration.bot.token);
 
     let ad_protection = AdProtection::new(
         configuration.ad_protection.base_url.clone(),

@@ -3,8 +3,14 @@ use std::fs::File;
 
 #[derive(Debug, Deserialize)]
 pub struct Configuration {
+    pub bot: Bot,
     pub chat: Chat,
     pub ad_protection: AdProtection
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Bot {
+    pub token: String
 }
 
 #[derive(Debug, Deserialize)]

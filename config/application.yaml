@@ -1,3 +1,6 @@
+bot:
+  token: bot_token_here
+
 chat:
   id: 12345678
 
