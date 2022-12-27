@@ -36,6 +36,9 @@ jobs:
   build-armv6:
     runs-on: ubuntu-latest
 
+    env:
+      RUNNER_ARCH: ARM
+
     steps:
       - name: Checkout
         uses: actions/checkout@v1
