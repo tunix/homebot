@@ -38,6 +38,8 @@ jobs:
 
       - name: Build
         run: |
+          rustup target add arm-unknown-linux-gnueabihf
+
           cargo build --release --target arm-unknown-linux-gnueabihf \
             && strip target/release/home \
             && mv target/release/home target/release/home_armv6
