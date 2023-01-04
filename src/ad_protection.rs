@@ -2,8 +2,6 @@ use std::time::Duration;
 
 use serde::Deserialize;
 
-const API_PATH: &'static str = "/admin/api.php";
-
 pub struct AdProtection {
     base_url: String,
     token: String,
@@ -14,12 +12,20 @@ impl AdProtection {
         Self { base_url, token }
     }
 
+    fn get_url(&self, path: &str) -> String {
+        format!(
+            "{}/admin/api.php?auth={}&{}",
+            self.base_url, self.token, path
+        )
+    }
+
     pub async fn is_enabled(&self) -> Result<bool, reqwest::Error> {
-        let url = format!("{}{API_PATH}?summary", self.base_url);
+        let url = self.get_url("summary");
 
         log::info!("Sending request to: {}", url);
 
-        let response = reqwest::get(url).await?
+        let response = reqwest::get(url)
+            .await?
             .json::<PiHoleSummaryResponse>()
             .await?;
 
@@ -30,12 +36,12 @@ impl AdProtection {
     }
 
     pub async fn disable(&self, duration: Duration) -> Result<bool, reqwest::Error> {
-        let params = format!("?disable={}&auth={}", duration.as_secs(), self.token);
-        let url = format!("{}{API_PATH}{}", self.base_url, params);
+        let url = self.get_url(format!("disable={}", duration.as_secs()).as_str());
 
         log::info!("Sending request to: {}", url);
 
-        let response = reqwest::get(url).await?
+        let response = reqwest::get(url)
+            .await?
             .json::<PiHoleSummaryResponse>()
             .await?;
 

@@ -1,7 +1,7 @@
-use std::{time::Duration, sync::Arc};
+use std::{sync::Arc, time::Duration};
 
 use dotenv::dotenv;
-use teloxide::{prelude::*, utils::command::BotCommands, types::User};
+use teloxide::{prelude::*, types::User, utils::command::BotCommands};
 
 use ad_protection::AdProtection;
 use command::{Command, Param};
@@ -78,18 +78,25 @@ async fn main() {
                 Command::DisableAdProtection { duration } => {
                     log::info!("Received DisableAdBlock command with duration: {:?}", duration);
 
+                    let dr: u64;
                     let result: Result<bool, reqwest::Error>;
 
                     if let Param::SingleNumber(minutes) = duration {
                         let seconds = minutes * 60;
 
+                        dr = minutes.into();
                         result = adp.disable(Duration::from_secs(seconds.into())).await;
                     } else {
+                        dr = DEFAULT_DURATION_TO_DISABLE_AD_PROTECTION / 60;
                         result = adp.disable(Duration::from_secs(DEFAULT_DURATION_TO_DISABLE_AD_PROTECTION)).await;
                     }
 
                     match result {
-                        Ok(_) => bot.send_message(msg.chat.id, "ok").await?,
+                        Ok(_) => {
+                            let reply = format!("ok. disabled ad protection for {dr} minutes.");
+
+                            bot.send_message(msg.chat.id, reply).await?
+                        },
                         Err(e) => {
                             log::error!("{}", e);
 
@@ -107,9 +114,7 @@ async fn main() {
 
 fn extract_user(msg: &Message) -> Option<User> {
     match &msg.kind {
-        teloxide::types::MessageKind::Common(mc) => {
-            mc.from.clone()
-        }
-        _ => None
+        teloxide::types::MessageKind::Common(mc) => mc.from.clone(),
+        _ => None,
     }
 }
