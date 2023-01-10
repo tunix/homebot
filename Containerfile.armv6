@@ -1,0 +1,18 @@
+FROM ghcr.io/tunix/rust-arm32v6 AS builder
+
+WORKDIR /usr/src/homebot
+COPY . .
+
+RUN cargo install --path .
+
+FROM docker.io/arm32v5/debian:stable-slim
+
+ENV RUST_LOG=info
+
+RUN apt-get update \
+    && apt-get install -y libssl-dev ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /usr/local/cargo/bin/home /usr/local/bin/home
+
+ENTRYPOINT ["home"]
