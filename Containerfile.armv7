@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:experimental
+
 FROM docker.io/rust:1.66.0 AS builder
 
 WORKDIR /usr/src/homebot
