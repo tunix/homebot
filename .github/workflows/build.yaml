@@ -33,6 +33,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set swap space
+        uses: pierotofy/set-swap-space@v1.0
+        with:
+          swap-size-gb: 10
+      - run: |
+          # Workaround for https://github.com/rust-lang/cargo/issues/8719
+          sudo mkdir -p /var/lib/docker
+          sudo mount -t tmpfs -o size=10G none /var/lib/docker
+          sudo systemctl restart docker
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -53,12 +63,21 @@ jobs:
           push: true
           tags: ghcr.io/tunix/homebot:latest
           platforms: linux/arm
-          allow: security.insecure
 
   build-armv7:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set swap space
+        uses: pierotofy/set-swap-space@v1.0
+        with:
+          swap-size-gb: 10
+      - run: |
+          # Workaround for https://github.com/rust-lang/cargo/issues/8719
+          sudo mkdir -p /var/lib/docker
+          sudo mount -t tmpfs -o size=10G none /var/lib/docker
+          sudo systemctl restart docker
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -79,4 +98,3 @@ jobs:
           push: true
           tags: ghcr.io/tunix/homebot:latest
           platforms: linux/arm/v7
-          allow: security.insecure

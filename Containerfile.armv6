@@ -1,14 +1,9 @@
-# syntax = docker/dockerfile:experimental
-
 FROM ghcr.io/tunix/rust-arm32v6 AS builder
 
 WORKDIR /usr/src/homebot
 COPY . .
 
-# https://github.com/rust-lang/cargo/issues/8719
-# https://github.com/JonasAlfredsson/docker-nginx-certbot/issues/109
-RUN --security=insecure mount -t tmpfs none $CARGO_HOME \
-    && cargo install --path .
+RUN cargo install --path .
 
 FROM docker.io/arm32v5/debian:stable-slim
 
