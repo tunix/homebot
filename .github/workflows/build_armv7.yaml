@@ -9,7 +9,7 @@ on:
       - 'Containerfile.armv7'
 
 jobs:
-  build:
+  build-armv7:
     runs-on: ubuntu-latest
 
     steps:
