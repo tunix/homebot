@@ -8,7 +8,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rustup target add arm-unknown-linux-musleabihf \
-    && cargo install --path --target=arm-unknown-linux-musleabihf .
+    && cargo install --target=arm-unknown-linux-musleabihf --path .
 
 FROM docker.io/arm32v5/debian:stable-slim
 
