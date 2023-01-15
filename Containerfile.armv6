@@ -4,10 +4,11 @@ WORKDIR /usr/src/homebot
 COPY . .
 
 RUN apt-get update \
-    && apt-get install -y pkg-config libssl-dev \
+    && apt-get install -y pkg-config libssl-dev musl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN cargo install --path .
+RUN rustup target add arm-unknown-linux-musleabihf \
+    && cargo install --path --target=arm-unknown-linux-musleabihf .
 
 FROM docker.io/arm32v5/debian:stable-slim
 
