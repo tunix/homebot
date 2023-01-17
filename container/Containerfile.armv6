@@ -13,6 +13,6 @@ RUN apt-get update \
     && apt-get install -y ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /cargo/bin/home /usr/local/bin/home
+COPY --from=builder /root/.cargo/bin/home /usr/local/bin/home
 
 ENTRYPOINT ["home"]
