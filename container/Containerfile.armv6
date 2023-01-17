@@ -1,4 +1,4 @@
-FROM docker.io/blackdex/rust-musl:arm-musleabihf
+FROM docker.io/blackdex/rust-musl:arm-musleabihf AS builder
 
 WORKDIR /usr/src/homebot
 COPY . .
