@@ -29,7 +29,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          file: ./Containerfile
+          file: ./container/Containerfile
           push: true
           tags: ghcr.io/tunix/homebot
           platforms: linux/amd64, linux/arm64

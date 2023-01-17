@@ -1,5 +1,7 @@
 FROM ghcr.io/tunix/rust-arm32v6 AS builder
 
+COPY container/arm/cargo.config /cargo/.config
+
 WORKDIR /usr/src/homebot
 COPY . .
 
