@@ -1,7 +1,5 @@
 FROM docker.io/blackdex/rust-musl:arm-musleabihf
 
-COPY container/arm/cargo.config /cargo/.config
-
 WORKDIR /usr/src/homebot
 COPY . .
 

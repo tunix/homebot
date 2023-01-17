@@ -6,7 +6,7 @@ on:
       - 'config/**'
       - 'src/**'
       - 'Cargo.*'
-      - 'Containerfile'
+      - '**/Containerfile'
 
 jobs:
   build:

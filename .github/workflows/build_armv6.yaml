@@ -6,7 +6,7 @@ on:
       - 'config/**'
       - 'src/**'
       - 'Cargo.*'
-      - 'Containerfile.armv6'
+      - '**/Containerfile.armv6'
 
 jobs:
   build-armv6:
