@@ -5,23 +5,23 @@ use std::fs::File;
 pub struct Configuration {
     pub bot: Bot,
     pub chat: Chat,
-    pub ad_protection: AdProtection
+    pub pihole: Pihole,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Bot {
-    pub token: String
+    pub token: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Chat {
-    pub id: i64
+    pub id: i64,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AdProtection {
+pub struct Pihole {
     pub base_url: String,
-    pub token: String
+    pub token: String,
 }
 
 pub fn read_config() -> Configuration {

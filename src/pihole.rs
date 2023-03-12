@@ -2,12 +2,12 @@ use std::time::Duration;
 
 use serde::Deserialize;
 
-pub struct AdProtection {
+pub struct Pihole {
     base_url: String,
     token: String,
 }
 
-impl AdProtection {
+impl Pihole {
     pub fn new(base_url: String, token: String) -> Self {
         Self { base_url, token }
     }

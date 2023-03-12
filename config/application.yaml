@@ -4,6 +4,6 @@ bot:
 chat:
   id: 12345678
 
-ad_protection:
+pihole:
   base_url: http://192.168.1.2
   token: abc123

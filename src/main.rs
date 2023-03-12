@@ -3,14 +3,14 @@ use std::{sync::Arc, time::Duration};
 use dotenv::dotenv;
 use teloxide::{prelude::*, types::User, utils::command::BotCommands};
 
-use ad_protection::AdProtection;
 use command::{Command, Param};
+use pihole::Pihole;
 
-mod ad_protection;
 mod command;
 mod configuration;
+mod pihole;
 
-const DEFAULT_DURATION_TO_DISABLE_AD_PROTECTION: u64 = 600; // 10 minutes
+const DEFAULT_DURATION_TO_DISABLE_PIHOLE: u64 = 600; // 10 minutes
 
 #[tokio::main]
 async fn main() {
@@ -21,16 +21,16 @@ async fn main() {
     let configuration = configuration::read_config();
     let bot = Bot::new(&configuration.bot.token);
 
-    let ad_protection = AdProtection::new(
-        configuration.ad_protection.base_url.clone(),
-        configuration.ad_protection.token.clone(),
+    let pihole = Pihole::new(
+        configuration.pihole.base_url.clone(),
+        configuration.pihole.token.clone(),
     );
 
-    let ad_protection = Arc::new(ad_protection);
+    let pihole = Arc::new(pihole);
     let configuration = Arc::new(configuration);
 
     Command::repl(bot, move |bot: Bot, msg: Message, cmd: Command| {
-        let adp = ad_protection.clone();
+        let ph = pihole.clone();
         let config = configuration.clone();
 
         log::debug!("Received msg: {:?}", msg);
@@ -59,10 +59,10 @@ async fn main() {
 
                     bot.send_message(msg.chat.id, "pong").await?
                 }
-                Command::IsAdProtectionEnabled => {
-                    log::info!("Checking if tracking service is enabled...");
+                Command::IsPiholeEnabled => {
+                    log::info!("Checking if pihole is enabled...");
 
-                    match adp.is_enabled().await {
+                    match ph.is_enabled().await {
                         Ok(is_enabled) => {
                             let status = if is_enabled { "enabled" } else { "disabled" };
 
@@ -75,8 +75,8 @@ async fn main() {
                         }
                     }
                 }
-                Command::DisableAdProtection { duration } => {
-                    log::info!("Received DisableAdBlock command with duration: {:?}", duration);
+                Command::DisablePihole { duration } => {
+                    log::info!("Received DisablePihole command with duration: {:?}", duration);
 
                     let dr: u64;
                     let result: Result<bool, reqwest::Error>;
@@ -85,15 +85,15 @@ async fn main() {
                         let seconds = minutes * 60;
 
                         dr = minutes.into();
-                        result = adp.disable(Duration::from_secs(seconds.into())).await;
+                        result = ph.disable(Duration::from_secs(seconds.into())).await;
                     } else {
-                        dr = DEFAULT_DURATION_TO_DISABLE_AD_PROTECTION / 60;
-                        result = adp.disable(Duration::from_secs(DEFAULT_DURATION_TO_DISABLE_AD_PROTECTION)).await;
+                        dr = DEFAULT_DURATION_TO_DISABLE_PIHOLE / 60;
+                        result = ph.disable(Duration::from_secs(DEFAULT_DURATION_TO_DISABLE_PIHOLE)).await;
                     }
 
                     match result {
                         Ok(_) => {
-                            let reply = format!("ok. disabled ad protection for {dr} minutes.");
+                            let reply = format!("ok. disabled pihole for {dr} minutes.");
 
                             bot.send_message(msg.chat.id, reply).await?
                         },

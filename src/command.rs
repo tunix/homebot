@@ -31,12 +31,12 @@ pub enum Command {
     Ping,
     #[command(
         rename_rule = "snake_case",
-        description = "Checks whether the ad protection blocking is enabled or not."
+        description = "Checks whether the pihole is enabled or not."
     )]
     IsPiholeEnabled,
     #[command(
         rename_rule = "snake_case",
-        description = "Disables ad protection for the given number of minutes."
+        description = "Disables pihole for the given number of minutes."
     )]
     DisablePihole { duration: Param },
 }
