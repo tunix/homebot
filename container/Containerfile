@@ -1,5 +1,7 @@
 FROM docker.io/rust:1.66.0 AS builder
 
+ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
+
 WORKDIR /usr/src/homebot
 COPY . .
 

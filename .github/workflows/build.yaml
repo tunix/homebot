@@ -15,10 +15,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      # https://yaleman.org/post/2022/2022-10-23-docker-rust-cargo-and-137-errors/
-      CARGO_NET_GIT_FETCH_WITH_CLI: true
-
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
