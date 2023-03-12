@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - '.github/workflows/build_armv6.yaml'
       - 'config/**'
       - 'src/**'
       - 'Cargo.*'
