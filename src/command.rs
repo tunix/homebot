@@ -29,8 +29,14 @@ pub enum Command {
     Help,
     #[command(rename_rule = "lowercase", description = "Ping & Pong")]
     Ping,
-    #[command(rename_rule = "snake_case", description = "Checks whether the ad protection blocking is enabled or not.")]
-    IsAdProtectionEnabled,
-    #[command(rename_rule = "snake_case", description = "Disables ad protection for the given number of minutes.")]
-    DisableAdProtection { duration: Param },
+    #[command(
+        rename_rule = "snake_case",
+        description = "Checks whether the ad protection blocking is enabled or not."
+    )]
+    IsPiholeEnabled,
+    #[command(
+        rename_rule = "snake_case",
+        description = "Disables ad protection for the given number of minutes."
+    )]
+    DisablePihole { duration: Param },
 }
