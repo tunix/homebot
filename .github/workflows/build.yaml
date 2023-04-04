@@ -35,4 +35,3 @@ jobs:
           file: ./container/Containerfile
           push: true
           tags: ghcr.io/tunix/homebot
-          platforms: linux/amd64, linux/arm64
